@@ -1,0 +1,441 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dermato by "m4nsii"</title>
+  <meta name="description" content="Dermato by &quot;m4nsii&quot; — a demo UI for a student-built dermatology assistant aligned with SDG 3. Frontend only. Not medical advice."/>
+  <meta name="theme-color" content="#0b1f3a">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --navy-900:#0b1f3a;
+      --navy-800:#102a4a;
+      --navy-700:#14365c;
+      --gold-500:#d4af37;
+      --gold-400:#f1d27a;
+      --text-100:#f5f7fb;
+      --text-300:#c8d0e0;
+      --border:rgba(255,255,255,.12);
+      --shadow:0 12px 30px rgba(0,0,0,.35);
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    body{
+      background: radial-gradient(1200px 600px at 20% 0%, rgba(212,175,55,.12), transparent 60%),
+                  linear-gradient(180deg, var(--navy-900), var(--navy-800));
+      color:var(--text-100);
+      font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
+      line-height:1.6;
+      min-height:100dvh;
+    }
+    a{color:inherit;text-decoration:none}
+    .container{width:min(1100px,92%);margin-inline:auto}
+    .headline{font-family:"Playfair Display", Georgia, "Times New Roman", serif;font-weight:700;font-size:clamp(2rem,4vw,3rem);letter-spacing:.2px;margin:0 0 .25rem}
+    .subhead{color:var(--text-300);margin:.25rem 0 1.25rem}
+
+    /* Nav */
+    .navbar{position:sticky;top:0;z-index:50;background:rgba(11,31,58,.7);backdrop-filter:blur(8px);border-bottom:1px solid var(--border)}
+    .nav-inner{display:flex;align-items:center;justify-content:space-between;min-height:64px}
+    .brand{display:flex;align-items:center;gap:.6rem;font-weight:700}
+    .logo{filter:drop-shadow(0 2px 6px rgba(0,0,0,.25))}
+    .nav-toggle{display:none;background:transparent;border:0;gap:5px}
+    .nav-toggle .bar{display:block;width:22px;height:2px;background:var(--text-100);margin:4px 0;border-radius:2px}
+    .nav-menu{display:flex;gap:1rem}
+    .nav-menu a{padding:.5rem .8rem;border-radius:999px;border:1px solid transparent;color:var(--text-300)}
+    .nav-menu a:hover{background:rgba(255,255,255,.06);border-color:var(--border);color:var(--text-100)}
+    .nav-menu a.active{color:var(--text-100);border-color:rgba(212,175,55,.35);background:rgba(212,175,55,.08)}
+
+    /* Buttons & Cards */
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;padding:.8rem 1.1rem;border-radius:12px;border:1px solid var(--border);background:rgba(255,255,255,.04);color:var(--text-100);box-shadow:var(--shadow);transition:transform .15s ease,filter .15s ease,background .15s ease}
+    .btn:hover{transform:translateY(-1px);filter:brightness(1.04)}
+    .btn:active{transform:translateY(0)}
+    .btn-primary{background:linear-gradient(180deg, var(--gold-500), var(--gold-400));color:#0b1f3a;border:none}
+    .btn-ghost{background:transparent;border-color:var(--border)}
+    .btn-small{padding:.55rem .8rem;border-radius:10px}
+    .chip{display:inline-flex;align-items:center;gap:.4rem;padding:.45rem .7rem;border-radius:999px;border:1px solid var(--border);background:rgba(255,255,255,.05);cursor:pointer;user-select:none}
+    .chip.active{background:rgba(212,175,55,.16);border-color:rgba(212,175,55,.35)}
+
+    .card{background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));border:1px solid var(--border);border-radius:16px;box-shadow:var(--shadow);padding:1.1rem}
+    .glass{background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));backdrop-filter:blur(6px)}
+
+    /* Sections */
+    .hero{padding:64px 0 24px}
+    .hero-inner{display:grid;grid-template-columns:1.1fr .9fr;gap:2rem;align-items:center}
+    .cta{display:flex;gap:.8rem;flex-wrap:wrap}
+    .features{padding:14px 0 36px}
+    .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+    .about{padding:24px 0 64px}
+    .footer{border-top:1px solid var(--border);padding:16px 0;background:rgba(11,31,58,.6);backdrop-filter:blur(8px)}
+    .footer-inner{display:flex;flex-direction:column;gap:.2rem;align-items:center;text-align:center}
+
+    /* Chat */
+    .page-head{padding:40px 0 12px}
+    .chat-wrap{padding:12px 0 64px}
+    .chat{display:flex;flex-direction:column;gap:12px}
+    .chat-window{height:380px;overflow:auto;padding:1rem;background:rgba(0,0,0,.15);border:1px solid var(--border);border-radius:12px}
+    .msg{display:flex;margin:.25rem 0}
+    .msg .bubble{padding:.6rem .8rem;border-radius:12px;max-width:75%;background:rgba(255,255,255,.06);border:1px solid var(--border)}
+    .msg.user{justify-content:flex-end}
+    .msg.user .bubble{background:rgba(212,175,55,.15);border-color:rgba(212,175,55,.35)}
+    .chat-input{display:flex;gap:.6rem;flex-wrap:wrap}
+    .chat-input input[type="text"]{flex:1;min-width:220px;padding:.8rem;border-radius:12px;border:1px solid var(--border);background:rgba(255,255,255,.06);color:var(--text-100)}
+    .note{color:var(--text-300);margin:0 .2rem}
+
+    .uploader{display:grid;grid-template-columns:1fr;gap:.75rem}
+    .upload-row{display:flex;gap:.6rem;flex-wrap:wrap;align-items:center}
+    .preview{display:flex;gap:.75rem;align-items:center}
+    .preview img{width:78px;height:78px;object-fit:cover;border-radius:10px;border:1px solid var(--border)}
+    .meter{height:10px;border-radius:999px;background:rgba(255,255,255,.1);position:relative;overflow:hidden}
+    .meter>span{display:block;height:100%;width:0%;background:linear-gradient(90deg,var(--gold-500),var(--gold-400))}
+
+    /* Responsive */
+    @media(max-width: 900px){.hero-inner{grid-template-columns:1fr}}
+    @media(max-width: 720px){
+      .nav-toggle{display:flex}
+      .nav-menu{position:absolute;top:64px;left:0;right:0;display:none;flex-direction:column;background:rgba(11,31,58,.95);border-bottom:1px solid var(--border)}
+      .nav-menu.open{display:flex}
+      .nav-menu a{padding:1rem 1.1rem;border-bottom:1px solid var(--border)}
+      .grid-3{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+  <header class="navbar">
+    <div class="container nav-inner">
+      <a class="brand" href="#home" aria-label="Dermato Home">
+        <svg width="28" height="28" viewBox="0 0 24 24" aria-hidden="true" class="logo">
+          <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#d4af37"/><stop offset="100%" stop-color="#f1d27a"/></linearGradient></defs>
+          <circle cx="12" cy="12" r="10" fill="url(#g)"></circle>
+          <path d="M7 13c2 2 4 2 6 0" fill="none" stroke="#0b1f3a" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        <span>Dermato by "m4nsii"</span>
+      </a>
+      <button class="nav-toggle" aria-expanded="false" aria-controls="nav-menu" aria-label="Toggle navigation">
+        <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+      </button>
+      <nav id="nav-menu" class="nav-menu" aria-label="Primary">
+        <a href="#home" class="active">Home</a>
+        <a href="#chatbot">Chatbot</a>
+        <a href="#about">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="home">
+    <section class="hero">
+      <div class="container hero-inner">
+        <div class="hero-copy">
+          <h1 class="headline">Skin care, simplified</h1>
+          <p class="subhead">A polished, navy & gold interface for a student-built dermatology assistant (SDG 3). This is a front‑end demo with simulated AI replies — no real diagnosis.</p>
+          <div class="cta">
+            <a class="btn btn-primary" href="#chatbot">Start chat</a>
+            <a class="btn btn-ghost" href="#about">Learn more</a>
+          </div>
+        </div>
+        <div class="card glass">
+          <div class="card-header">Demo flow</div>
+          <div class="card-body">
+            <ul class="preview-list">
+              <li>Upload an image (local preview only)</li>
+              <li>Select symptom chips & duration</li>
+              <li>Get a simulated suggestion</li>
+              <li>Open Maps to find clinics</li>
+            </ul>
+            <a class="btn btn-ghost btn-small" href="#chatbot">Try it</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="features">
+      <div class="container grid-3">
+        <article class="feature card">
+          <h3>Simple upload</h3>
+          <p>Client-side compression & preview to keep things smooth. No data leaves your browser.</p>
+        </article>
+        <article class="feature card">
+          <h3>Guided questions</h3>
+          <p>Toggle common symptoms, add duration/severity, and get a clear next-step suggestion.</p>
+        </article>
+        <article class="feature card">
+          <h3>Clinic Finder</h3>
+          <p>Uses your device location (with permission) to open dermatologists nearby in Google Maps.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="chatbot" class="page-head">
+      <div class="container">
+        <h2 class="headline">Chatbot</h2>
+        <p class="subhead">Demo only. This simulates how the AI will respond based on your inputs.</p>
+      </div>
+    </section>
+
+    <section class="chat-wrap">
+      <div class="container">
+        <div class="chat card">
+          <div class="uploader">
+            <div class="upload-row">
+              <input id="file" type="file" accept="image/*" />
+              <button class="btn btn-ghost btn-small" id="clearImg" type="button">Clear image</button>
+              <span id="imgInfo" aria-live="polite"></span>
+            </div>
+            <div class="preview" id="preview" hidden>
+              <img id="thumb" alt="Uploaded preview"/>
+              <div>
+                <div class="meter" aria-hidden="true"><span id="qMeter"></span></div>
+                <small class="subhead">Preview quality estimate</small>
+              </div>
+            </div>
+          </div>
+
+          <div class="symptoms card">
+            <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+              <span class="chip" data-s="redness">Redness</span>
+              <span class="chip" data-s="itching">Itching</span>
+              <span class="chip" data-s="pain">Pain</span>
+              <span class="chip" data-s="dryness">Dryness</span>
+              <span class="chip" data-s="pimples">Pimples</span>
+              <span class="chip" data-s="rash">Rash</span>
+            </div>
+            <div style="display:flex;gap:.6rem;flex-wrap:wrap;margin-top:.6rem">
+              <label>Duration (days): <input id="dur" type="number" min="0" step="1" value="1" style="width:80px;padding:.35rem .5rem;border-radius:8px;border:1px solid var(--border);background:rgba(255,255,255,.06);color:var(--text-100)"></label>
+              <label>Severity (1–10): <input id="sev" type="number" min="1" max="10" step="1" value="3" style="width:80px;padding:.35rem .5rem;border-radius:8px;border:1px solid var(--border);background:rgba(255,255,255,.06);color:var(--text-100)"></label>
+              <button id="analyze" class="btn btn-primary btn-small" type="button">Analyze</button>
+              <button id="findClinics" class="btn btn-ghost btn-small" type="button">Find nearby clinics</button>
+              <button id="clearChat" class="btn btn-ghost btn-small" type="button">Clear history</button>
+            </div>
+          </div>
+
+          <div class="chat-window" id="chat" role="log" aria-live="polite">
+            <div class="msg bot"><div class="bubble">Hi! I’m Dermato. Add a photo (optional), choose symptoms, and press <em>Analyze</em>. I’ll simulate suggestions. For real concerns, consult a dermatologist.</div></div>
+          </div>
+
+          <form class="chat-input" onsubmit="return false" aria-label="Chat input">
+            <input id="text" type="text" placeholder="Type a message to add context (optional)"/>
+            <button class="btn btn-primary" id="send" type="button">Send</button>
+          </form>
+
+          <p class="note">Disclaimer: This is a student demo UI. It does not provide medical advice or diagnosis.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="about" class="about">
+      <div class="container">
+        <div class="card">
+          <h2>About</h2>
+          <p>This front‑end showcases the intended flow for an AI dermatology assistant aligned with SDG 3. It uses simulated logic only; no data leaves your browser unless you open Google Maps for clinics.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <p>© <span id="year"></span> Dermato by "m4nsii"</p>
+      <p><small>UI: navy + gold • Frontend demo only</small></p>
+    </div>
+  </footer>
+
+  <script>
+    // Navbar toggle
+    const toggle = document.querySelector('.nav-toggle');
+    const menu = document.querySelector('#nav-menu');
+    if (toggle && menu){
+      toggle.addEventListener('click', () => {
+        const open = menu.classList.toggle('open');
+        toggle.setAttribute('aria-expanded', String(open));
+      });
+    }
+
+    // Active nav on scroll
+    const links = document.querySelectorAll('.nav-menu a');
+    function setActiveLink(){
+      const fromTop = window.scrollY + 80;
+      links.forEach(link => {
+        const sec = document.querySelector(link.getAttribute('href'));
+        if (!sec) return;
+        if (sec.offsetTop <= fromTop && sec.offsetTop + sec.offsetHeight > fromTop){
+          link.classList.add('active');
+        } else {
+          link.classList.remove('active');
+        }
+      });
+    }
+    window.addEventListener('scroll', setActiveLink);
+    setActiveLink();
+
+    // Footer year
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Chat helpers
+    const chat = document.getElementById('chat');
+    function addMsg(role, text){
+      const wrap = document.createElement('div');
+      wrap.className = 'msg ' + (role === 'user' ? 'user' : 'bot');
+      const b = document.createElement('div');
+      b.className = 'bubble';
+      b.innerHTML = text;
+      wrap.appendChild(b);
+      chat.appendChild(wrap);
+      chat.scrollTop = chat.scrollHeight;
+      saveHistory();
+    }
+
+    // Local history
+    function saveHistory(){ localStorage.setItem('dermato_history', chat.innerHTML); }
+    function loadHistory(){
+      const h = localStorage.getItem('dermato_history');
+      if (h) chat.innerHTML = h;
+    }
+    loadHistory();
+
+    // Chips (symptoms)
+    const selected = new Set();
+    document.querySelectorAll('.chip').forEach(ch => {
+      ch.addEventListener('click', () => {
+        const key = ch.dataset.s;
+        if (selected.has(key)){ selected.delete(key); ch.classList.remove('active'); }
+        else { selected.add(key); ch.classList.add('active'); }
+      });
+    });
+
+    // Text send
+    document.getElementById('send').addEventListener('click', () => {
+      const t = document.getElementById('text');
+      if (!t.value.trim()) return;
+      addMsg('user', t.value);
+      setTimeout(() => addMsg('bot', 'Noted. I will consider that context when analyzing your inputs.'), 300);
+      t.value='';
+    });
+
+    // Image upload + preview + simple compression
+    const fileInput = document.getElementById('file');
+    const thumb = document.getElementById('thumb');
+    const preview = document.getElementById('preview');
+    const info = document.getElementById('imgInfo');
+    const qMeter = document.getElementById('qMeter');
+
+    function humanSize(bytes){
+      const units = ['B','KB','MB','GB']; let i=0, n=bytes;
+      while(n>=1024 && i<units.length-1){ n/=1024; i++; }
+      return n.toFixed(1)+' '+units[i];
+    }
+
+    function estimateQuality(w,h){ // naive estimate for preview only
+      const pixels = w*h;
+      const pct = Math.max(10, Math.min(100, (pixels/ (800*800))*100));
+      return pct;
+    }
+
+    fileInput.addEventListener('change', async (e) => {
+      const f = e.target.files[0];
+      if (!f) return;
+      const url = URL.createObjectURL(f);
+      const img = new Image();
+      img.onload = () => {
+        // Draw to canvas to create a thumbnail (no upload)
+        const canvas = document.createElement('canvas');
+        const maxSide = 256;
+        const scale = Math.min(1, maxSide/Math.max(img.width, img.height));
+        canvas.width = Math.round(img.width*scale);
+        canvas.height = Math.round(img.height*scale);
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        thumb.src = canvas.toDataURL('image/jpeg', 0.8);
+        preview.hidden = false;
+        info.textContent = `Selected: ${f.name} • ${humanSize(f.size)} • ${img.width}×${img.height}`;
+        const q = estimateQuality(img.width, img.height);
+        qMeter.style.width = q + '%';
+        URL.revokeObjectURL(url);
+        addMsg('user', 'Uploaded an image for analysis (preview only).');
+      };
+      img.src = url;
+    });
+
+    document.getElementById('clearImg').addEventListener('click', () => {
+      fileInput.value = '';
+      thumb.removeAttribute('src');
+      preview.hidden = true;
+      info.textContent = '';
+      addMsg('user','Cleared the image.');
+    });
+
+    // Simulated analysis
+    function generateSuggestion(symSet, duration, severity){
+      const s = Array.from(symSet);
+      const d = Number(duration)||0;
+      const sev = Number(severity)||1;
+      let base = [];
+      if (s.includes('pimples') || s.includes('redness')) base.push('acne-like irritation');
+      if (s.includes('rash')) base.push('dermatitis');
+      if (s.includes('dryness')) base.push('dry skin/eczema');
+      if (s.includes('itching')) base.push('allergic reaction');
+      if (s.includes('pain')) base.push('inflamed lesion');
+      if (base.length===0) base.push('a minor skin irritation');
+
+      const risk = (sev>=7 || d>=7) ? 'moderate' : (sev>=4 || d>=3) ? 'low-to-moderate' : 'low';
+      const care = [
+        'cleanse gently; avoid harsh scrubs',
+        'apply a light, non-comedogenic moisturizer',
+        'use sunscreen (SPF 30+) daily',
+      ];
+      if (s.includes('itching')) care.push('consider calamine lotion or a mild antihistamine (OTC, label-directed)');
+      if (s.includes('dryness')) care.push('use fragrance-free moisturizer with ceramides');
+      if (s.includes('pimples')) care.push('spot-treat with 2.5% benzoyl peroxide or 0.5–1% salicylic acid');
+      if (s.includes('redness')) care.push('avoid new cosmetics for 48h; keep skin barrier care');
+      if (s.includes('pain')) care.push('avoid popping/squeezing; apply cool compress 5–10 min');
+
+      const follow = risk==='moderate'
+        ? 'Consider seeing a dermatologist, especially if spreading, painful, or with fever.'
+        : 'Monitor for changes; seek a professional if symptoms worsen.';
+
+      return `I see signs consistent with <b>${base.join(' / ')}</b> (risk: <b>${risk}</b>). Suggested care: <ul>${care.map(c=>`<li>${c}</li>`).join('')}</ul>${follow}`;
+    }
+
+    document.getElementById('analyze').addEventListener('click', () => {
+      const d = document.getElementById('dur').value;
+      const sev = document.getElementById('sev').value;
+      addMsg('user', `Analyze my inputs. Symptoms: <code>${Array.from(selected).join(', ')||'none'}</code>; duration: ${d}d; severity: ${sev}/10.`);
+      // Fake "thinking"
+      const thinking = document.createElement('div');
+      thinking.className='msg bot';
+      thinking.innerHTML = '<div class="bubble">Analyzing…</div>';
+      chat.appendChild(thinking); chat.scrollTop = chat.scrollHeight;
+      setTimeout(() => {
+        thinking.remove();
+        const suggestion = generateSuggestion(selected, d, sev);
+        addMsg('bot', suggestion + '<br><small class="subhead">This is a demo and not medical advice.</small>');
+      }, 600);
+    });
+
+    // Maps: nearby dermatologists
+    document.getElementById('findClinics').addEventListener('click', () => {
+      if ('geolocation' in navigator){
+        navigator.geolocation.getCurrentPosition(pos => {
+          const {latitude, longitude} = pos.coords;
+          const url = `https://www.google.com/maps/search/dermatologist/@${latitude},${longitude},14z`;
+          window.open(url, '_blank', 'noopener');
+          addMsg('bot', 'Opened Google Maps with dermatologists near your location.');
+        }, () => {
+          window.open('https://www.google.com/maps/search/dermatologist', '_blank', 'noopener');
+          addMsg('bot', 'Opened Google Maps search for dermatologists (location permission denied).');
+        }, {enableHighAccuracy:true, timeout:8000});
+      } else {
+        window.open('https://www.google.com/maps/search/dermatologist', '_blank', 'noopener');
+        addMsg('bot', 'Opened Google Maps search for dermatologists (geolocation not available).');
+      }
+    });
+
+    // Clear history
+    document.getElementById('clearChat').addEventListener('click', () => {
+      chat.innerHTML = '<div class="msg bot"><div class="bubble">History cleared. Start again by adding an image or selecting symptoms.</div></div>';
+      saveHistory();
+    });
+  </script>
+</body>
+</html>
